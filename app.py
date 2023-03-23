@@ -1,5 +1,5 @@
 from products import productos
-from flask import Flask, jsonify, json
+from flask import Flask, jsonify, json, request
 
 app = Flask(__name__)
 
@@ -27,6 +27,16 @@ def get_Product(product_name):
         return jsonify({"Product": product_found[0]})
     return jsonify({"message": "Product not found"})
 
+# Puede tener el mismo nombre que la anterior, porque ambas tienen distintos metodos HTTP
+@app.route('/products', methods=['POST'])
+def addProducts():
+    new_product = {
+        "name": request.json["name"],
+        "presio": request.json["presio"],
+        "cantidad": request.json["cantidad"]
+    }
+    productos.append(new_product)
+    return jsonify({"Message":"Producto agregado satisfactoriamente", "Producto agregado:": productos})
 
 # Este script sirve para actualizar el programa cada que hayan cambios
 if __name__ == "__main__":
